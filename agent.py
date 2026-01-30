@@ -33,7 +33,7 @@ def build_agent():
     agent = create_agent(
         model=model,
         tools=[send_email_to_samuel],
-        prompt=system_prompt,
+        system_prompt=system_prompt,
     )
 
     return agent
@@ -103,17 +103,19 @@ async def run_agent_stream(
         # Handle text streaming from the model
         if event_type == "on_chat_model_stream":
             chunk = event.get("data", {}).get("chunk")
-            text = getattr(chunk, "content", None) if chunk else None
-            if text:
-                collected_content += text
-                yield collected_content
+            raw_content = getattr(chunk, "content", None) if chunk else None
+            if raw_content:
+                text = _extract_text_content(raw_content)
+                if text:
+                    collected_content += text
+                    yield collected_content
 
         # Handle final response (fallback if streaming doesn't work)
         elif event_type == "on_chat_model_end":
             output = event.get("data", {}).get("output")
-            text = getattr(output, "content", None) if output else None
-            if text and not collected_content:
-                collected_content = text
+            raw_content = getattr(output, "content", None) if output else None
+            if raw_content and not collected_content:
+                collected_content = _extract_text_content(raw_content)
                 yield collected_content
 
     # Ensure we always yield something if nothing was collected
