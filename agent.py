@@ -4,7 +4,7 @@ import os
 from collections.abc import AsyncGenerator
 
 from dotenv import load_dotenv
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+from langchain_core.messages import HumanMessage, AIMessage
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.agents import create_agent
 
@@ -15,14 +15,14 @@ from tools import send_email_to_samuel
 load_dotenv()
 
 
-def create_agent():
+def build_agent():
     """Create and return a ReAct agent with tools."""
     api_key = os.getenv("GOOGLE_API_KEY")
     if not api_key:
         raise ValueError("GOOGLE_API_KEY environment variable is not set")
 
     model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash",
+        model="gemini-3-flash-preview",
         google_api_key=api_key,
         temperature=0.7,
     )
@@ -68,7 +68,7 @@ def _convert_history_to_messages(history: list) -> list:
         content = _extract_text_content(raw_content)
 
         # Skip empty messages or tool metadata messages
-        if not content or not content.strip():
+        if not content.strip():
             continue
 
         if role == "user":
@@ -103,17 +103,18 @@ async def run_agent_stream(
         # Handle text streaming from the model
         if event_type == "on_chat_model_stream":
             chunk = event.get("data", {}).get("chunk")
-            if chunk and hasattr(chunk, "content") and chunk.content:
-                collected_content += chunk.content
+            text = getattr(chunk, "content", None) if chunk else None
+            if text:
+                collected_content += text
                 yield collected_content
 
         # Handle final response (fallback if streaming doesn't work)
         elif event_type == "on_chat_model_end":
             output = event.get("data", {}).get("output")
-            if output and hasattr(output, "content") and output.content:
-                if not collected_content:
-                    collected_content = output.content
-                    yield collected_content
+            text = getattr(output, "content", None) if output else None
+            if text and not collected_content:
+                collected_content = text
+                yield collected_content
 
     # Ensure we always yield something if nothing was collected
     if not collected_content:

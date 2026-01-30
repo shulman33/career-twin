@@ -2,10 +2,10 @@
 
 import gradio as gr
 
-from agent import create_agent, run_agent_stream
+from agent import build_agent, run_agent_stream
 
 # Create agent once at startup
-agent = create_agent()
+agent = build_agent()
 
 
 async def chat(message: str, history: list) -> str:
