@@ -11,13 +11,13 @@ pinned: false
 
 # Career Twin
 
-An AI-powered chatbot that represents Samuel Shulman to recruiters. Built with LangChain, Google Gemini, and Gradio.
+An AI-powered chatbot that represents Sam Shulman to recruiters. Built with LangChain, Google Gemini, and Gradio.
 
 ## Features
 
-- Answers questions about Samuel's background, skills, and experience
+- Answers questions about Sam's background, skills, and experience
 - Uses context from resume, LinkedIn profile, and personal Q&A document
-- Allows recruiters to send messages directly to Samuel via email
+- Allows recruiters to send messages directly to Sam via email
 - Deployed on Hugging Face Spaces for free hosting
 
 ## Local Development

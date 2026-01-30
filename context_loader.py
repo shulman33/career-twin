@@ -46,7 +46,7 @@ def load_context() -> str:
     sections = []
 
     if summary:
-        sections.append(f"## About Samuel\n{summary}")
+        sections.append(f"## About Sam\n{summary}")
 
     if resume:
         sections.append(f"## Resume\n{resume}")

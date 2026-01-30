@@ -1,4 +1,4 @@
-"""SMTP tool for sending recruiter messages to Samuel."""
+"""SMTP tool for sending recruiter messages to Sam."""
 
 import logging
 import os
@@ -45,7 +45,7 @@ You are a conversation summarizer.
 # Instructions
 1. Summarize this recruiter-agent conversation in 3-5 bullet points
 2. Focus on: what the recruiter asked about, key topics discussed, and any specific interests they expressed
-3. Keep it concise and actionable for Samuel to quickly understand the context
+3. Keep it concise and actionable for Sam to quickly understand the context
 
 # Input
 {conversation}"""
@@ -96,9 +96,9 @@ def send_email_to_samuel(
     recruiter_email: str, message: str, conversation_history: str
 ) -> str:
     """
-    Send an email to Samuel with the recruiter's message and conversation summary.
+    Send an email to Sam with the recruiter's message and conversation summary.
 
-    Use this tool when a recruiter wants to get in touch with Samuel directly,
+    Use this tool when a recruiter wants to get in touch with Sam directly,
     express interest in his profile, or schedule a conversation.
     """
     try:
@@ -119,6 +119,6 @@ def send_email_to_samuel(
         logger.error(f"Failed to send email: {type(e).__name__}: {e}")
         return (
             "I wasn't able to send your message due to a technical issue. "
-            "You can reach Samuel directly at samshulman6@gmail.com. "
+            "You can reach Sam directly at samshulman6@gmail.com."
             "Sorry for the inconvenience!"
         )

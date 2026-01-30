@@ -1,7 +1,7 @@
 [project]
 name = "career-twin"
 version = "0.1.0"
-description = "AI-powered chatbot representing Samuel Shulman to recruiters"
+description = "AI-powered chatbot representing Sam Shulman to recruiters"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

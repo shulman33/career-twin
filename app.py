@@ -31,18 +31,18 @@ async def chat(message: str, history: list) -> str:
 
 demo = gr.ChatInterface(
     fn=chat,
-    title="Chat with Samuel's AI Twin",
+    title="Chat with Sam's AI Twin",
     description=(
-        "Hi! I'm an AI representing Samuel Shulman. "
+        "Hi! I'm an AI representing Sam Shulman. "
         "Ask me about his background, skills, experience, or projects. "
-        "If you'd like to connect with Samuel directly, just let me know!"
+        "If you'd like to connect with Sam directly, just let me know!"
     ),
     examples=[
         "Tell me about yourself",
         "What are your technical skills?",
         "What projects have you worked on?",
         "Are you open to new opportunities?",
-        "I'd like to get in touch with Samuel",
+        "I'd like to get in touch with Sam",
     ],
     cache_examples=False,
 )

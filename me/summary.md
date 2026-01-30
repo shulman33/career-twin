@@ -1,4 +1,4 @@
-# About Me: Samuel Shulman
+# About Me: Sam Shulman
 
 ## Who I Am
 

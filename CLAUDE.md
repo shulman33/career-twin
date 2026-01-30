@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Career-twin is an AI-powered chatbot that represents Samuel Shulman to recruiters. It uses LangChain with Google's Gemini models to answer recruiter questions based on personal context (resume, LinkedIn profile).
+Career-twin is an AI-powered chatbot that represents Sam Shulman to recruiters. It uses LangChain with Google's Gemini models to answer recruiter questions based on personal context (resume, LinkedIn profile).
 
 **The problem:** Recruiters find my LinkedIn, visit my portfolio, get curious—but then we fall into slow email tag.
 
