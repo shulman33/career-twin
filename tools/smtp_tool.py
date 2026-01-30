@@ -7,9 +7,12 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+from dotenv import load_dotenv
 from langchain.tools import tool
 from langchain_google_genai import ChatGoogleGenerativeAI
 from pydantic import BaseModel, Field, field_validator
+
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +37,7 @@ class SendEmailInput(BaseModel):
 
 def _summarize_conversation(conversation: str) -> str:
     """Generate a concise summary of the conversation using Gemini."""
-    llm = ChatGoogleGenerativeAI(model="gemini-3-flash-preview")
+    llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash")
 
     prompt = f"""# Role
 You are a conversation summarizer.
@@ -99,10 +102,11 @@ def send_email_to_samuel(
     express interest in his profile, or schedule a conversation.
     """
     try:
+        recipient_email = os.getenv("RECIPIENT_EMAIL", "samshulman6@gmail.com")
         summary = _summarize_conversation(conversation_history)
         body = _format_email_body(recruiter_email, message, summary)
         _send_smtp_email(
-            to_email="samshulman6@gmail.com",
+            to_email=recipient_email,
             subject=f"Career Twin: Message from recruiter ({recruiter_email})",
             body=body,
         )

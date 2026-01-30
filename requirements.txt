@@ -1,0 +1,6 @@
+gradio>=5.0.0
+langchain>=1.2.7
+langchain-google-genai>=4.2.0
+langgraph>=0.2.0
+pypdf>=5.1.0
+python-dotenv>=1.2.1
