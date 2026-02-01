@@ -1,12 +1,10 @@
-"""SMTP tool for sending recruiter messages to Sam."""
+"""Email tool for sending recruiter messages to Sam via Resend API."""
 
 import logging
 import os
 import re
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 
+import resend
 from dotenv import load_dotenv
 from langchain.tools import tool
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -54,24 +52,23 @@ You are a conversation summarizer.
     return response.content
 
 
-def _send_smtp_email(to_email: str, subject: str, body: str) -> None:
-    """Send an email via Gmail SMTP."""
-    sender_email = os.getenv("EMAIL_ADDRESS")
-    sender_password = os.getenv("EMAIL_PASSWORD")
+def _send_resend_email(to_email: str, subject: str, body: str) -> None:
+    """Send an email via Resend API."""
+    resend.api_key = os.getenv("RESEND_API_KEY")
 
-    if not sender_email or not sender_password:
-        raise ValueError("EMAIL_ADDRESS and EMAIL_PASSWORD must be set in environment")
+    if not resend.api_key:
+        raise ValueError("RESEND_API_KEY must be set in environment")
 
-    msg = MIMEMultipart()
-    msg["From"] = sender_email
-    msg["To"] = to_email
-    msg["Subject"] = subject
-    msg.attach(MIMEText(body, "plain"))
+    from_email = os.getenv("FROM_EMAIL", "onboarding@resend.dev")
 
-    with smtplib.SMTP("smtp.gmail.com", 587) as server:
-        server.starttls()
-        server.login(sender_email, sender_password)
-        server.sendmail(sender_email, to_email, msg.as_string())
+    params: resend.Emails.SendParams = {
+        "from": from_email,
+        "to": [to_email],
+        "subject": subject,
+        "text": body,
+    }
+
+    resend.Emails.send(params)
 
 
 def _format_email_body(recruiter_email: str, message: str, summary: str) -> str:
@@ -105,7 +102,7 @@ def send_email_to_samuel(
         recipient_email = os.getenv("RECIPIENT_EMAIL", "samshulman6@gmail.com")
         summary = _summarize_conversation(conversation_history)
         body = _format_email_body(recruiter_email, message, summary)
-        _send_smtp_email(
+        _send_resend_email(
             to_email=recipient_email,
             subject=f"Career Twin: Message from recruiter ({recruiter_email})",
             body=body,

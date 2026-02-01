@@ -11,4 +11,5 @@ dependencies = [
     "langgraph>=0.2.0",
     "pypdf>=5.1.0",
     "python-dotenv>=1.2.1",
+    "resend>=2.21.0",
 ]
