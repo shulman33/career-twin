@@ -24,7 +24,7 @@ Prefer simple, straightforward solutions. Any added complexity must be justified
 uv sync
 
 # Run the application
-uv run python main.py
+uv run python app.py
 
 # Add a new dependency
 uv add <package-name>
@@ -32,7 +32,8 @@ uv add <package-name>
 
 ## Architecture
 
-- **`main.py`** - Application entry point
+- **`app.py`** - Gradio application entry point (runs on HuggingFace Spaces)
+- **`agent.py`** - LangChain agent configuration and streaming logic
 - **`me/`** - Personal context directory containing:
   - `resume.pdf` - Resume document
   - `linkedin.pdf` - LinkedIn profile export

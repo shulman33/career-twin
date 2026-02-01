@@ -47,3 +47,6 @@ demo = gr.ChatInterface(
     ],
     cache_examples=False,
 )
+
+if __name__ == "__main__":
+    demo.launch()
