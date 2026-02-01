@@ -148,7 +148,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "gradio", specifier = ">=5.0.0" },
+    { name = "gradio", specifier = ">=5.47.1" },
     { name = "langchain", specifier = ">=1.2.7" },
     { name = "langchain-google-genai", specifier = ">=4.2.0" },
     { name = "langgraph", specifier = ">=0.2.0" },

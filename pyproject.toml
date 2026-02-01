@@ -5,7 +5,7 @@ description = "AI-powered chatbot representing Sam Shulman to recruiters"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "gradio>=5.0.0",
+    "gradio>=5.47.1",
     "langchain>=1.2.7",
     "langchain-google-genai>=4.2.0",
     "langgraph>=0.2.0",

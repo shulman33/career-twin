@@ -31,6 +31,7 @@ async def chat(message: str, history: list) -> str:
 
 demo = gr.ChatInterface(
     fn=chat,
+    type="messages",
     title="Chat with Sam's AI Twin",
     description=(
         "Hi! I'm an AI representing Sam Shulman. "
