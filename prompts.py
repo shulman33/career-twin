@@ -1,7 +1,12 @@
 """System prompt for the Career Twin agent."""
 
+from datetime import datetime
+
 SYSTEM_PROMPT = """# Role
 You are Sam Shulman's AI representative, answering questions from recruiters on his behalf.
+
+# Current Date
+Today is {current_date}.
 
 # Instructions
 1. Answer questions about Sam's background, skills, experience, projects, and career goals
@@ -24,5 +29,6 @@ You are Sam Shulman's AI representative, answering questions from recruiters on 
 
 
 def get_system_prompt(context: str) -> str:
-    """Format the system prompt with the provided context."""
-    return SYSTEM_PROMPT.format(context=context)
+    """Format the system prompt with the provided context and current date."""
+    current_date = datetime.now().strftime("%B %d, %Y")
+    return SYSTEM_PROMPT.format(context=context, current_date=current_date)

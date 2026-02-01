@@ -52,8 +52,8 @@ You are a conversation summarizer.
     return response.content
 
 
-def _send_resend_email(to_email: str, subject: str, body: str) -> None:
-    """Send an email via Resend API."""
+def _send_resend_email(to_email: str, subject: str, html: str) -> None:
+    """Send an HTML email via Resend API."""
     resend.api_key = os.getenv("RESEND_API_KEY")
 
     if not resend.api_key:
@@ -65,27 +65,48 @@ def _send_resend_email(to_email: str, subject: str, body: str) -> None:
         "from": from_email,
         "to": [to_email],
         "subject": subject,
-        "text": body,
+        "html": html,
     }
 
     resend.Emails.send(params)
 
 
-def _format_email_body(recruiter_email: str, message: str, summary: str) -> str:
-    """Format the email body with message first, then summary and contact."""
-    return f"""MESSAGE FROM RECRUITER
-{message}
+def _format_email_html(recruiter_email: str, message: str, summary: str) -> str:
+    """Format the email as HTML with clean, minimal styling."""
+    # Convert markdown bullet points to HTML list items
+    summary_lines = summary.strip().split("\n")
+    summary_html_items = []
+    for line in summary_lines:
+        # Remove leading bullet characters (*, -, •) and whitespace
+        clean_line = line.lstrip("*-• ").strip()
+        if clean_line:
+            summary_html_items.append(f"<li>{clean_line}</li>")
+    summary_list = "\n".join(summary_html_items)
 
----
+    return f"""<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body style="margin: 0; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #ffffff; color: #1a1a1a; line-height: 1.6;">
+    <div style="max-width: 600px; margin: 0 auto;">
+        <h2 style="font-size: 18px; font-weight: 600; margin: 0 0 12px 0; color: #1a1a1a;">Message from Recruiter</h2>
+        <p style="margin: 0 0 24px 0; white-space: pre-wrap;">{message}</p>
 
-CONVERSATION SUMMARY
-{summary}
+        <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 24px 0;">
 
----
+        <h2 style="font-size: 18px; font-weight: 600; margin: 0 0 12px 0; color: #1a1a1a;">Conversation Summary</h2>
+        <ul style="margin: 0 0 24px 0; padding-left: 20px;">
+            {summary_list}
+        </ul>
 
-CONTACT
-{recruiter_email}
-"""
+        <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 24px 0;">
+
+        <h2 style="font-size: 18px; font-weight: 600; margin: 0 0 12px 0; color: #1a1a1a;">Contact</h2>
+        <p style="margin: 0;"><a href="mailto:{recruiter_email}" style="color: #0066cc; text-decoration: none;">{recruiter_email}</a></p>
+    </div>
+</body>
+</html>"""
 
 
 @tool(args_schema=SendEmailInput)
@@ -101,11 +122,11 @@ def send_email_to_samuel(
     try:
         recipient_email = os.getenv("RECIPIENT_EMAIL", "samshulman6@gmail.com")
         summary = _summarize_conversation(conversation_history)
-        body = _format_email_body(recruiter_email, message, summary)
+        html = _format_email_html(recruiter_email, message, summary)
         _send_resend_email(
             to_email=recipient_email,
             subject=f"Career Twin: Message from recruiter ({recruiter_email})",
-            body=body,
+            html=html,
         )
         return (
             "Your message has been sent to Sam. "
